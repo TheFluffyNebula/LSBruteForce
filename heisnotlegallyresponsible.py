@@ -115,7 +115,7 @@ class DataDragonCache(dict):
     
     def select_all(self) -> set:
         """Get the set of all possible answers."""
-        return self.select(True, True, True, True, True, True)
+        return self.select(champion=True, item=True, skin=True, ability=True, keystone_rune_and_summoner_spell=True, nonkeystone_rune=True)
 
     def _get_json(self, member):
         r = requests.get(self.url + member.name)
