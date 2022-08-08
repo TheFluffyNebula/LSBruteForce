@@ -46,7 +46,7 @@ class DataDragonCache(dict):
     def refresh(self) -> None:
         """Refresh the cache based on the latest data uploaded to the data dragon documentation."""
         # get latest
-        docs_page = BeautifulSoup(requests.get("https://developer.riotgames.com/docs/lol").content, features="html.parser")
+        docs_page = BeautifulSoup(requests.get(self.docs).content, features="html.parser")
         for link in docs_page.find_all("a"):
             if "ddragon" in link.get("href", ""):
                 tarball = link["href"]
