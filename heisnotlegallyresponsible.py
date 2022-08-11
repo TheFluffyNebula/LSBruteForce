@@ -63,9 +63,9 @@ class DataDragonCache(dict):
 
             future_to_member = {executor.submit(self._get_json, member): member 
                                                     for member in members
-                                                    if (member.name.endswith('.json') and 
-                                                            (self.language in member.name) and 
-                                                            any(category in member.name for category in self.categories))}
+                                                    if (member.name.endswith('.json') 
+                                                        and (self.language in member.name) 
+                                                        and any(category in member.name for category in self.categories))}
                                                             
             for future in concurrent.futures.as_completed(future_to_member):
                 member = future_to_member[future]
@@ -73,7 +73,7 @@ class DataDragonCache(dict):
                     json_obj = future.result()
                     self._add(member, json_obj)
                 except Exception as exc:
-                    print('%r generated an exception: %s' % (member, exc))
+                    print(f"{member} generated an exception: {exc}")
 
         # fix Gangplank
         if "<rarityLegendary>Fire at Will</rarityLegendary><br><subtitleLeft><silver>500 Silver Serpents</silver></subtitleLeft>" in self["item"]:
@@ -117,11 +117,11 @@ class DataDragonCache(dict):
         """Get the set of all possible answers."""
         return self.select(champion=True, item=True, skin=True, ability=True, keystone_rune_and_summoner_spell=True, nonkeystone_rune=True)
 
-    def _get_json(self, member):
+    def _get_json(self, member: tarfile.TarInfo) -> dict:
         r = requests.get(self.url + member.name)
         return r.json()
 
-    def _add(self, member, json_obj):
+    def _add(self, member: tarfile.TarInfo, json_obj: list | dict) -> None:
 
         if "runesReforged" in member.name:
             for rune_page in json_obj:
